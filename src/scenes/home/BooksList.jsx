@@ -12,7 +12,6 @@ const BooksList = ({ value }) => {
     const dispatch = useDispatch()
 
     let { isLoading, items, totalItems, startIndex } = useSelector((state) => state.search);
-    console.log(startIndex)
     const increaseStartIndex = () => {
         dispatch(getStartIndex(startIndex))
     }
