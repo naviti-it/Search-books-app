@@ -5,9 +5,10 @@ const initialState = {
     item: null,
     items: [],
     isLoading: false,
-    totalItems: "",
+    totalItems: 0,
     startIndex: 0
 }
+
 
 export const searchSlice = createSlice({
     name: "search",
@@ -17,20 +18,20 @@ export const searchSlice = createSlice({
             state.isLoading = !state.isLoading
         },
         getTotalItems:(state, action)=>{
-            state.totalItems = action.payload
+            state.totalItems = +action.payload
         },
         getStartIndex: (state, action)=>{
-            state.startIndex = action.payload + 30
+            state.startIndex = action.payload 
+        },
+        setItems:(state, action)=>{
+            state.items = action.payload
         }
     },
     extraReducers: builder =>{
         builder.addCase(getBooksListByOptions.fulfilled, (state, action)=>{
-
-            state.items = state.items.length > 0? 
-            [...state.items, ...action.payload] : 
-            [...action.payload]
-
+            state.items = !action.meta.arg.searchValue ? [] : state.items.length? [...state.items, ...action.payload]: [...action.payload]
         })
+        
         builder.addCase(getBookItemById.fulfilled, (state, action)=>{
             state.item = action.payload;
         })

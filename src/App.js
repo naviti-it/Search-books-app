@@ -27,7 +27,7 @@ const {render, value} = useSearchBooksForm()
           <Header {...{render}}/>
         <Routes>
           <Route path="/" element={<BooksList {...{value}}/>} />
-          <Route path="items/:itemId" element={<BookDetails />} />
+          <Route path="/:itemId" element={<BookDetails />} />
         </Routes>
       </BrowserRouter>
     </div>

@@ -1,11 +1,11 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { getStartIndex, getTotalItems, setIsLoading } from "..";
 
-export const getBooksListByOptions = createAsyncThunk("search/getBooksListByOptions", async (option, thunksAPI)=>{
+export const getBooksListByOptions = createAsyncThunk("search/getBooksListByOptions", async (options, thunksAPI)=>{
     thunksAPI.dispatch(setIsLoading(true));
     
     const items = await fetch(
-        `https://www.googleapis.com/books/v1/volumes?q=${option.searchValue}${option.categories !== "all" ? `+subject:${option.categories}` : ""}&orderBy=${option.orderBy}&startIndex=${option.startIndex}&maxResults=30&key=AIzaSyDsyPet3p9mCR3h6KFDOWJRLIdYAO7_fcM`,
+        `https://www.googleapis.com/books/v1/volumes?q=${options.searchValue}${options.categories !== "all" ? `+subject:${options.categories}` : ""}&orderBy=${options.orderBy}&startIndex=${options.startIndex}&maxResults=30&key=AIzaSyDsyPet3p9mCR3h6KFDOWJRLIdYAO7_fcM`,
         {
             method: 'GET',
             headers: {
@@ -14,9 +14,10 @@ export const getBooksListByOptions = createAsyncThunk("search/getBooksListByOpti
         }
     );
     const itemsJson = await items.json();
+    const {totalItems} = thunksAPI.getState()
     thunksAPI.dispatch(setIsLoading(false));
-    thunksAPI.dispatch(getTotalItems(itemsJson.totalItems))
-    thunksAPI.dispatch(getStartIndex(option.startIndex))
+    !totalItems && thunksAPI.dispatch(getTotalItems(itemsJson.totalItems))
+    thunksAPI.dispatch(getStartIndex(options.startIndex+30))
     return itemsJson.items;
 })
 

@@ -1,5 +1,4 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 import { Box, Typography, Button } from '@mui/material';
 import Loader from './Loader';
 import BookItem from './../../components/BookItem';
@@ -10,19 +9,19 @@ import { getStartIndex } from '../../state/index';
 
 
 const BooksList = ({ value }) => {
-    const navigate = useNavigate()
     const dispatch = useDispatch()
 
     let { isLoading, items, totalItems, startIndex } = useSelector((state) => state.search);
-
+    console.log(startIndex)
     const increaseStartIndex = () => {
         dispatch(getStartIndex(startIndex))
-        navigate("../")
     }
 
     const loadMore = () => {
-        increaseStartIndex()
-        dispatch(getBooksListByOptions({ ...value, startIndex: startIndex }))
+        if (startIndex > 0) {
+            increaseStartIndex()
+            dispatch(getBooksListByOptions({ ...value, startIndex: startIndex }))
+        }
     }
 
     return (
@@ -35,7 +34,7 @@ const BooksList = ({ value }) => {
                 textAlign="center"
                 paddingBottom="10px"
             >
-                {totalItems ? `Found ${totalItems} results` : "No results were found. Try another queries!"}
+                {items.length ? `Found ${totalItems} results` : "No results were found. Try another queries!"}
             </Typography>
             <Box>
                 <Box
@@ -51,9 +50,10 @@ const BooksList = ({ value }) => {
                     ))}
                 </Box>
             </Box>
+
             {
                 items?.length > 0 &&
-                ((startIndex + 30) < totalItems) &&
+                (startIndex < totalItems) &&
                 <Button
                     fullWidth
                     variant='contained'

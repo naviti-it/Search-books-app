@@ -24,9 +24,9 @@ const BookItem = ({ item }) => {
             >
                 <img
                     src={imageLinks?.thumbnail ? imageLinks?.thumbnail : defaultCover} alt="image"
-                    style={{ cursor: 'pointer', width: '150px' }}
+                    style={{ cursor: 'pointer', width: '150px', height: '200px', objectFit: 'cover' }}
                     onClick={() => {
-                        navigate(`/items/${item.id}`)
+                        navigate(`/${item.id}`)
                     }}
                 />
             </Box>

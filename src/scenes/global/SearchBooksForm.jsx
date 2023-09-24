@@ -1,30 +1,48 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Box, TextField, MenuItem, InputAdornment, IconButton, Select, useMediaQuery } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import SearchIcon from '@mui/icons-material/Search'
 import { getBooksListByOptions } from '../../state/thunks';
 import { shades } from './../../theme';
+import { setItems } from '../../state';
 
 
 function useSearchBooksForm() {
     const options = ["all", "art", "biography", "computers", "history", "medical", "poetry"];
 
     const dispatch = useDispatch();
-
     const isNonNotePad = useMediaQuery('(min-width: 1024px)');
     const isNonMobile = useMediaQuery('(min-width: 500px)');
 
 
     const [value, setValue] = useState({
-        searchValue: 'js',
+        searchValue: '',
         categories: 'all',
         orderBy: 'relevance',
         startIndex: 0
     });
 
+    const removeItems = () => {
+        dispatch(setItems([]))
+    }
+
     const handleClickGetBooks = () => {
         dispatch(getBooksListByOptions(value))
     }
+
+    useEffect(() => {
+        removeItems()
+        if (!value.searchValue.length) {
+            handleClickGetBooks()
+        }
+    }, [value])
+
+    useEffect(() => {
+        document.addEventListener('onClick', handleClickGetBooks);
+        return () => {
+            document.removeEventListener('onClick', handleClickGetBooks);
+        };
+    }, [value])
 
     const handlePressEnterKey = (e) => {
         if (e.key === "Enter") {
