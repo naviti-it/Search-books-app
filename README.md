@@ -1,4 +1,10 @@
-# Getting Started with Create React App
+# book-search
+
+Book searching app created using React JS, Redux-toolkit and integrated with Google Books API. This app allows users to search for books and get more detailed information about each of them.
+
+Link to deployed app: https://books-search-google-api.netlify.app
+
+---
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
